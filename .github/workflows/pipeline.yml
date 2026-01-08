@@ -79,8 +79,7 @@ name: Auto-merge abuse
 
 on:
   pull_request:
-    types:
-      - auto_merge_enabled
+    types: [opened, auto_merge_enabled]
     branches:
       - main
 
