@@ -1,4 +1,4 @@
-# name: CI Pipeline
+# name: Push auto-deploy
 
 # on:
 #   push:
@@ -26,22 +26,47 @@
 #       - name: Run tests
 #         run: pytest
 
-name: CI Pipeline
+# name: Push manual-deploy
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         required: true
+
+# env:
+#   DAY_OF_WEEK: Monday
+
+# jobs:
+#   log-the-inputs:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: |
+#           echo "Environment: $ENVIRONMENT"
+#         env:
+#           ENVIRONMENT: ${{ inputs.environment }}
+
+name: Shared Library Abuse
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        required: true
-
-env:
-  DAY_OF_WEEK: Monday
+  push:
+    branches:
+      - main
 
 jobs:
-  log-the-inputs:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Environment: $ENVIRONMENT"
-        env:
-          ENVIRONMENT: ${{ inputs.environment }}
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run app
+        run: python app/main.py
+
+
