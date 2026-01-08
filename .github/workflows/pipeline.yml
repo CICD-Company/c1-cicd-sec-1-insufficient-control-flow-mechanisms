@@ -68,6 +68,10 @@ jobs:
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=." >> $GITHUB_ENV
+      
+      - name: Debug installed packages
+        run: pip list
+        
       - name: Run app
         run: python app/main.py
 
