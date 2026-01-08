@@ -10,6 +10,5 @@ def main():
 
     print("Small update")
 
-
 if __name__ == "__main__":
     main()
