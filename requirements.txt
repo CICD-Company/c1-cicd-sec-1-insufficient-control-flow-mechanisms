@@ -1,2 +1,2 @@
 pytest==7.4.0
-git+https://github.com/Company/company-utils.git
+git+https://github.com/CICD-Company/Utility-library.git
