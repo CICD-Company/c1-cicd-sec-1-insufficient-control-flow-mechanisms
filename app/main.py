@@ -10,5 +10,7 @@ def main():
 
     print("Small update")
 
+    print("Auto-merge abused")
+
 if __name__ == "__main__":
     main()
