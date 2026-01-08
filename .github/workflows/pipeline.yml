@@ -1,27 +1,49 @@
+# name: CI Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.10'
+
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt
+
+#       - name: Set PYTHONPATH
+#         run: echo "PYTHONPATH=." >> $GITHUB_ENV
+#       - name: Run tests
+#         run: pytest
+
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+
+env:
+  DAY_OF_WEEK: Monday
 
 jobs:
-  test:
+  greeting_job:
     runs-on: ubuntu-latest
-
+    env:
+      Greeting: Hello
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=." >> $GITHUB_ENV
-      - name: Run tests
-        run: pytest
+      - name: "Say Hello Jacopo. Today is Monday"
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          First_Name: Jacopo
