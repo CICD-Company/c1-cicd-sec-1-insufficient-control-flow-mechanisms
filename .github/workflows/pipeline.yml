@@ -38,12 +38,10 @@ env:
   DAY_OF_WEEK: Monday
 
 jobs:
-  greeting_job:
+  log-the-inputs:
     runs-on: ubuntu-latest
-    env:
-      Greeting: Hello
     steps:
-      - name: "Say Hello Jacopo. Today is Monday"
-        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+      - run: |
+          echo "Environment: $ENVIRONMENT"
         env:
-          First_Name: Jacopo
+          ENVIRONMENT: ${{ inputs.environment }}
