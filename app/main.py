@@ -3,12 +3,11 @@ from utils import log
 
 
 def main():
-    print("CI/CD Flow Control Demo")
     print("2 + 3 =", add(2, 3))
 
+    # Function of the shared library
     log("Calculator started")
 
-    print("Small update")
 
 if __name__ == "__main__":
     main()

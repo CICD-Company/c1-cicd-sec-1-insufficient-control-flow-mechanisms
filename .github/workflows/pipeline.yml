@@ -1,104 +1,58 @@
-# name: Push auto-deploy
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.10'
-
-#       - name: Install dependencies
-#         run: pip install -r requirements.txt
-
-#       - name: Set PYTHONPATH
-#         run: echo "PYTHONPATH=." >> $GITHUB_ENV
-#       - name: Run tests
-#         run: pytest
-
-# name: Push manual-deploy
-
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       environment:
-#         required: true
-
-# env:
-#   DAY_OF_WEEK: Monday
-
-# jobs:
-#   log-the-inputs:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: |
-#           echo "Environment: $ENVIRONMENT"
-#         env:
-#           ENVIRONMENT: ${{ inputs.environment }}
-
-# name: Shared Library Abuse
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   run:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-
-#       - uses: actions/setup-python@v4
-#         with:
-#           python-version: "3.10"
-
-#       - name: Install dependencies
-#         run: pip install -r requirements.txt
-
-#       - name: Set PYTHONPATH
-#         run: echo "PYTHONPATH=." >> $GITHUB_ENV
-      
-#       - name: Debug installed packages
-#         run: pip list
-        
-#       - name: Run app
-#         run: python app/main.py
-
-name: Auto-merge abuse
+name: CI - Shared Library Abuse
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Python Environment
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.10'
+          python-version: "3.13"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+      
+      - name: Build Project
+        run: |
+          mkdir -p build
+          touch build/output_file.txt
 
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=." >> $GITHUB_ENV
       - name: Run tests
-        run: pytest
+        run: 
+          pytest
+
+      - name: Run app
+        run: |
+          python app/main.py
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: build-artifact
+          path: build/
+      
+  deploy:
+        runs-on: ubuntu-latest
+        needs: build-and-test
+        if: success()
+
+        steps:
+        - name: Download build artifact
+          uses: actions/download-artifact@v7
+          with:
+            name: build-artifact
+            path: build/
+
+        - name: Simulate Deployment
+          run: |
+            echo "Deploying to staging..."
+            ls build/
