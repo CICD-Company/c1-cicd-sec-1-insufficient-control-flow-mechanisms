@@ -9,5 +9,7 @@ def main():
     log("Calculator started")
 
 
+    print("Auto-merge abused")
+
 if __name__ == "__main__":
     main()
